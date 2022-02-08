@@ -1,0 +1,127 @@
+options:
+	prefix: &8[&dLifesteal&8]
+	life_limit: 50
+
+on join:
+	if {hearts::%uuid of player%} isn't set:
+		wait 1 second
+		set {hearts::%uuid of player%} to 10
+		send "{@prefix} &dLifesteal &7has been automatically set up, enjoy &d%player%"
+		#set player's max health to {hearts::%uuid of player%}
+
+on right click:
+	if name of player's held item is "&d&lLives Reset":
+		broadcast "{@prefix} &d%player% &ahas been revived!"
+		remove 1 of player's tool from player's tool
+	else if name of player's held item is "&d&lLife Revive":
+		broadcast "{@prefix} &d%player% &ahas been revived!"
+		set {hearts::%uuid of player%} to 10
+		remove 1 of player's tool from player's tool
+		
+
+on death of player:
+	if {lifesteal::toggle} is true:
+		if attacker is a player:
+			if {hearts::%uuid of victim%} > 1:
+				if {hearts::%uuid of victim%} = {@life_limit}:
+					send "{@prefix} &cYou have reached the max amount of hearts"
+					send "{@prefix} &aYou did not lose any hearts as &d%attacker% &ahas reached the max amount of hearts"
+				else:
+					remove 1 from {hearts::%uuid of victim%}
+					add 1 to {hearts::%uuid of attacker%}
+					#set attacker's max health to {hearts::%uuid of attacker%}
+					#set victim's max health to {hearts::%uuid of victim%}
+			else:
+				remove 1 from {hearts::%uuid of victim%}
+				add 1 to {hearts::%uuid of attacker%}
+				#set attacker's max health to {hearts::%uuid of attacker%}
+				broadcast "{@prefix} &d%victim% &clost all their lives and is now eliminated"
+				execute console command "/lp user %victim% parent set eliminated"
+				force player to respawn
+				teleport victim to {revive}
+
+command /lives [<player>]:
+	trigger:
+		if arg-1 is set:
+			send "{@prefix} &d%arg-1% &7has &d%{hearts::%uuid of arg-1%}% &7lives"
+		else:
+			send "{@prefix} &cYou have %{hearts::%uuid of player%}% hearts"
+
+command /givelife [<player>] [<int>]:
+	trigger:
+		if {lifesteal::toggle} is true:
+			if arg-1 is set:
+				if arg-1 is a player:
+					if arg-2 is set:
+						if arg-2 > 0:
+							if {hearts::%uuid of player%} >= arg-2:
+								if {hearts::%uuid of arg-1%} >= {@life_limit}:
+									send "{@prefix} &d%arg-1% &chas reached the life limi"
+								remove arg-2 from {hearts::%uuid of player%}
+								add arg-2 to {hearts::%uuid of arg-1%}
+								send "{@prefix} &7You gave &d%arg-1% %arg-2%&7 hearts"
+								send "{@prefix} &7You recieved &d%arg-2% &7hearts from &d%player%" to arg-1
+								#set player's max health to {hearts::%uuid of player%}
+								#set arg-1's max health to {hearts::%uuid of arg-1%}
+							else:
+								send "{@prefix} &cYou do not have enough hearts to do this"
+						else:
+							send "{@prefix} &cPlease enter a valid amount of hearts"
+					else:
+						send "{@prefix} &cInvalid Syntax: /givelife <player> <amount>"
+				else:
+					send "{@prefix} &cInvalid Syntax: /givelife <player> <amount>"
+			else:
+				send "{@prefix} &cInvalid Syntax: /givelife <player> <amount>"
+		else:
+			send "{@prefix} &cYou cannot do this because lifesteal is disabled"
+
+command /setlives [<player>] [<int>]:
+	permission: op
+	trigger:
+		if {lifesteal::toggle} is true:
+			set {hearts::%uuid of arg-1%} to arg-2
+			send "{@prefix} &d%arg-1%&a's lives has been set to &d%arg-2%"
+			send "{@prefix} &aYour lives has been set to &d%arg-2%&a by &d%player%"
+		else:
+			send "{@prefix} &cYou cannot do this because lifesteal is disabled"
+
+on tab complete of "/lifesteal":
+	set tab completions for position 1 to "resetall", "resetplayer" and "toggle"
+command /lifesteal [<text>] [<player>]:
+	permission: lifesteal.admin, op
+	permission message: {@prefix} &cYou don't have permission to use this command
+	trigger:
+		if arg-1 is set:
+			if arg-1 is "resetall":
+				send "{@prefix} &7Reseting all lives..."
+				wait 1 second
+				delete {hearts::*}
+				send "{@prefix} &aSuccessfully reset all lives."
+				broadcast "{@prefix} &aAll lives reset, re-join the game for it to take effect"
+			else if arg-1 is "resetplayer":
+				if arg-2 is a player:
+					set {hearts::%uuid of arg-2%} to 10
+					send "{@prefix} &cYour lives were reset" to arg-2
+					send "{@prefix} &aSuccessfully reset &d%arg-2%&a's lives."
+					#set arg-2's max health to {hearts::%uuid of arg-2%}
+			else if arg-1 is "toggle":
+				if {lifesteal::toggle} is not set:
+					set {lifesteal::toggle} to false
+					send "{@prefix} &cLifesteal disabled"
+					
+				else if {lifesteal::toggle} is true:
+					set {lifesteal::toggle} to false
+					broadcast "{@prefix} &cLifesteal disabled"
+					
+				else if {lifesteal::toggle} is false:
+					set {lifesteal::toggle} to true
+					broadcast "{@prefix} &aLifesteal enabled"
+
+command /setrevive:
+	permission: 03smp.spawn.setspawn
+	permission message: {@prefix} &cSorry, but you don't have permission to execute this command!
+	description: Set Revive area at your location.
+	trigger:
+		send "{@prefix} &6You have &cset revive&6 at your location!" to the player
+		set {revive} to location of player
