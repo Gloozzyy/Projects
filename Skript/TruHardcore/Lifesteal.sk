@@ -27,7 +27,9 @@ on death of player:
 				add 1 to {hearts::%uuid of attacker%}
 				set attacker's max health to {hearts::%uuid of attacker%}
 				broadcast "{@prefix} &d%victim% &clost all their lives and is now eliminated"
-        execute console command "/tempban %victim% 2w You lost all your lives and are now eliminated"
+        			execute console command "/tempban %victim% 2w You lost all your lives and are now eliminated"
+				set {hearts::%uuid of victim%} to 10
+				
 
 command /lives [<player>]:
 	trigger:
