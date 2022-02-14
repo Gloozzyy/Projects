@@ -1,6 +1,7 @@
 options:
 	prefix: &8[&dLifesteal&8]
 	life_limit: 50
+	version: &6v&e1.1
 
 on join:
 	if {hearts::%uuid of player%} isn't set:
@@ -112,3 +113,5 @@ command /lifesteal [<text>] [<player>]:
 				else if {lifesteal::toggle} is false:
 					set {lifesteal::toggle} to true
 					broadcast "{@prefix} &aLifesteal enabled"
+			else if arg-1 is "version":
+				send "{@prefix} {@version} &7by &dGloozzy"
