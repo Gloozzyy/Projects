@@ -19,3 +19,10 @@ function options(p: player):
 				set {options::%uuid of {_p}%::mentions} to true
 				options({_p})
 		open last created gui to {_p}
+
+on chat:
+	loop all players:
+		if message contains "%loop-player%":
+			if {options::%uuid of loop-player%::mentions} is true:
+				replace all "%loop-player%" with "&e@%loop-player%&r" in message
+				play sound "minecraft:entity.experience_orb.pickup" with volume 1 and pitch 2 to loop-player
