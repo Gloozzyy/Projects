@@ -1,0 +1,21 @@
+on join:
+	if {options::%uuid of player%::mentions} is not set:
+		set {options::%uuid of player%::mentions} to true
+
+command /options:
+	aliases: /controls, /profile
+	trigger:
+		options(player)
+			
+function options(p: player):
+	create a gui with virtual chest inventory with size 5 named "User Profile":
+		make gui slot 13 with skull of {_p} named "&b%{_p}%" with lore " ", "&bLives&f: &7%{hearts::%uuid of {_p}%}%", "&bKills: &7%{kills.%uuid of {_p}%}%", "&bDeaths: &7%{deaths.%uuid of {_p}%}%"
+		if {options::%uuid of {_p}%::mentions} is true:
+			make gui slot 31 with lime dye named "&bChat Mentions" with lore " ", "&aOn":
+				set {options::%uuid of {_p}%::mentions} to false
+				options({_p})
+		else:
+			make gui slot 31 with red dye named "&bChat Mentions" with lore " ", "&cOff":
+				set {options::%uuid of {_p}%::mentions} to true
+				options({_p})
+		open last created gui to {_p}
