@@ -1,3 +1,11 @@
+# Chat Mentions by Gloozzy
+#
+# How do I use it?
+#   Say a player in the server's name and it will mention them if they have chat mentions on.
+#
+# How do I disable chat mentions?
+#   Execute the command /options and click the red dye (chat mentions toggle button)
+
 on join:
 	if {options::%uuid of player%::mentions} is not set:
 		set {options::%uuid of player%::mentions} to true
