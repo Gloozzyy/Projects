@@ -1,6 +1,11 @@
 # Skript Projects
 Source Code for my Skripts on my Minehut servers.
 
+Requirements for majority of them:
+[•] Skript
+[•] sk-bee
+[•] skript-gui
+
 ## 03Gens:
 
 ## 03Mines:
