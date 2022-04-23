@@ -5,6 +5,9 @@
 #
 # How do I disable chat mentions?
 #   Execute the command /options and click the red dye (chat mentions toggle button)
+#
+# Changelogs:
+# [+] Added credits in bottom right of GUI
 
 on join:
 	if {options::%uuid of player%::mentions} is not set:
@@ -26,7 +29,7 @@ function options(p: player):
 			make gui slot 31 with red dye named "&bChat Mentions" with lore " ", "&cOff":
 				set {options::%uuid of {_p}%::mentions} to true
 				options({_p})
-		make gui slot 44 with end portal frame named "&bCredits" with lore " ", "&8- &bSkript made by &b&lGloozzy"
+		make gui slot 44 with end portal frame named "&bCredits" with lore " ", "&8- &bSkript made by &b&lGloozzy", "&a&lScuffle&5&lMC &bcreated by &b&lxBooga"
 		open last created gui to {_p}
 
 on chat:
