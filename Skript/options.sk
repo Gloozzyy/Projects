@@ -26,6 +26,7 @@ function options(p: player):
 			make gui slot 31 with red dye named "&bChat Mentions" with lore " ", "&cOff":
 				set {options::%uuid of {_p}%::mentions} to true
 				options({_p})
+		make gui slot 44 with end portal frame named "&bCredits" with lore " ", "&8- &bSkript made by &b&lGloozzy"
 		open last created gui to {_p}
 
 on chat:
