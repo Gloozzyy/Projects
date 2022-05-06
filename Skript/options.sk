@@ -54,7 +54,7 @@ on chat:
 		if message contains "%loop-player%":
 			if {options::%uuid of loop-player%::mentions} is true:
 				replace all "%loop-player%" with "&e@%loop-player%&r" in message
-				if {options::%uuid of {_p}%::dnd} is false:
+				if {options::%uuid of loop-player%::dnd} is false:
 					play sound "minecraft:entity.experience_orb.pickup" with volume 1 and pitch 2 to loop-player
 
 on load:
