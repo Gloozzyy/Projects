@@ -8,6 +8,7 @@
 #
 # Changelogs:
 # [+] Added credits in bottom right of GUI
+# [+] New option: DND, disables the ping noise
 
 on join:
 	if {options::%uuid of player%::mentions} is not set:
