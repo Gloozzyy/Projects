@@ -21,6 +21,7 @@ command /options:
 function options(p: player):
 	create a gui with virtual chest inventory with size 5 named "User Profile":
 		make gui slot 13 with skull of {_p} named "&b%{_p}%" with lore " ", "&bLives&f: &7%{hearts::%uuid of {_p}%}%", "&bKills: &7%{kills.%uuid of {_p}%}%", "&bDeaths: &7%{deaths.%uuid of {_p}%}%"
+		#mentions
 		if {options::%uuid of {_p}%::mentions} is true:
 			make gui slot 31 with lime dye named "&bChat Mentions" with lore " ", "&aOn":
 				set {options::%uuid of {_p}%::mentions} to false
@@ -28,6 +29,15 @@ function options(p: player):
 		else:
 			make gui slot 31 with red dye named "&bChat Mentions" with lore " ", "&cOff":
 				set {options::%uuid of {_p}%::mentions} to true
+				options({_p})
+		#dnd
+		if {options::%uuid of {_p}%::dnd} is true:
+			make gui slot 32 with red dye named "&bDo Not Disturb" with lore " ", "&aOn":
+				set {options::%uuid of {_p}%::dnd} to false
+				options({_p})
+		else:
+			make gui slot 32 with red dye named "&bDo Not Disturb" with lore " ", "&cOff":
+				set {options::%uuid of {_p}%::dnd} to true
 				options({_p})
 		make gui slot 44 with end portal frame named "&bCredits" with lore " ", "&8- &bSkript made by &b&lGloozzy", "&a&lScuffle&5&lMC &bcreated by &b&lxBooga"
 		open last created gui to {_p}
@@ -37,4 +47,5 @@ on chat:
 		if message contains "%loop-player%":
 			if {options::%uuid of loop-player%::mentions} is true:
 				replace all "%loop-player%" with "&e@%loop-player%&r" in message
-				play sound "minecraft:entity.experience_orb.pickup" with volume 1 and pitch 2 to loop-player
+				if {options::%uuid of {_p}%::dnd} is false:
+					play sound "minecraft:entity.experience_orb.pickup" with volume 1 and pitch 2 to loop-player
