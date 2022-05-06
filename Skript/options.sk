@@ -39,7 +39,7 @@ function options(p: player):
 				options({_p})
 		#dnd
 		if {options::%uuid of {_p}%::dnd} is true:
-			make gui slot 32 with red dye named "&bDo Not Disturb" with lore " ", "&aOn":
+			make gui slot 32 with lime dye named "&bDo Not Disturb" with lore " ", "&aOn":
 				set {options::%uuid of {_p}%::dnd} to false
 				options({_p})
 		else:
