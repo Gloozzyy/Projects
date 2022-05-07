@@ -57,11 +57,4 @@ on chat:
 				if {options::%uuid of loop-player%::dnd} is false:
 					play sound "minecraft:entity.experience_orb.pickup" with volume 1 and pitch 2 to loop-player
 
-on load:
-	send " " to all players
-	send "{@prefix} &bOptions GUI has been reloaded &8| &bUpdates:" to all players
-	send "{@plusicon} &aNew option: DND, disables the ping noise" to all players
-	send " &8- &bMade by &b&lGloozzy" to all players
-	send "  " to all players
-
 
