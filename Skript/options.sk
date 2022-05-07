@@ -25,7 +25,7 @@ command /options:
 			
 function options(p: player):
 	create a gui with virtual chest inventory with size 5 named "User Profile":
-		make gui slot 13 with skull of {_p} named "&b%{_p}%" with lore " ", "&bLives&f: &7%{hearts::%uuid of {_p}%}%", "&bKills: &7%{kills.%uuid of {_p}%}%", "&bDeaths: &7%{deaths.%uuid of {_p}%}%"
+		make gui slot 13 with skull of {_p} named "&b%{_p}%"
 		#mentions
 		if {options::%uuid of {_p}%::mentions} is true:
 			make gui slot 31 with lime dye named "&bChat Mentions" with lore " ", "&aOn":
