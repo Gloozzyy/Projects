@@ -7,7 +7,6 @@
 #   Execute the command /options and click the red dye (chat mentions toggle button)
 #
 # Changelogs:
-# [+] Added credits in bottom right of GUI
 # [+] New option: DND, disables the ping noise
 
 options:
