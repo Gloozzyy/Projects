@@ -33,7 +33,7 @@ command /clearchat:
 	trigger:
 		loop 1000 times:
 			send "" to all players
-		broadcast "{@prefix} &cChat has been cleared by %player%"
+			broadcast "{@prefix} &cChat has been cleared by %player%"
 
 command /mutechat:
 	permission: 03mod.mutechat
