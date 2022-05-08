@@ -31,7 +31,7 @@ command /profile [<player>]:
 	trigger:
 		if arg-1 is set:
 			if {options::%uuid of arg-1%::publicprofile} is true:
-				profile(arg-1)
+				profile(player, arg-1)
 				stop
 			else:
 				send "{@prefix} &cThis user's profile is not public!"
@@ -42,12 +42,12 @@ function options(p: player):
 	create a gui with virtual chest inventory with size 5 named "User Profile":
 		make gui slot 13 with skull of {_p} named "&b%{_p}%"
 		#profile publicity
-		if {options::%uuid of {_p}%::mentions} is true:
+		if {options::%uuid of {_p}%::publicprofile} is true:
 			make gui slot 30 with lime dye named "&bProfile Publicity" with lore " ", "&aPublic":
 				set {options::%uuid of {_p}%::publicprofile} to false
 				options({_p})
 		else:
-			make gui slot 31 with red dye named "&bProfile Publicity" with lore " ", "&cPrivate":
+			make gui slot 30 with red dye named "&bProfile Publicity" with lore " ", "&cPrivate":
 				set {options::%uuid of {_p}%::publicprofile} to true
 				options({_p})
 		#mentions
@@ -71,9 +71,9 @@ function options(p: player):
 		make gui slot 44 with end portal frame named "&bCredits" with lore " ", "&8- &bSkript made by &b&lGloozzy"
 		open last created gui to {_p}
 
-function profile(p: player):
-	create a gui with virtual chest inventory with size 3 named "%{_p}%'s Profile":
-		make gui slot 13 with skull of {_p} named "&b%{_p}%" with lore "&bKills: &7%{your kill variable}%", "&bDeaths: &7%{your death variable}%"
+function profile(p: player, t: player):
+	create a gui with virtual chest inventory with size 3 named "%{_t}%'s Profile":
+		make gui slot 13 with skull of {_t} named "&b%{_t}%" with lore "&bKills: &7%{kills.%uuid of {_t}%}%", "&bDeaths: &7%{deaths.%uuid of {_t}%}%"
 		
 		open last created gui to {_p}
 
@@ -84,5 +84,4 @@ on chat:
 				replace all "%loop-player%" with "&e@%loop-player%&r" in message
 				if {options::%uuid of loop-player%::dnd} is false:
 					play sound "minecraft:entity.experience_orb.pickup" with volume 1 and pitch 2 to loop-player
-
 
