@@ -18,6 +18,8 @@ on join:
 		set {options::%uuid of player%::mentions} to true
 	if {options::%uuid of player%::dnd} is not set:
 		set {options::%uuid of player%::dnd} to false
+	if {options::%uuid of player%::publicprofile} is not set:
+		set {options::%uuid of player%::publicprofile} to true
 
 command /options:
 	aliases: /controls
