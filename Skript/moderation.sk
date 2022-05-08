@@ -7,9 +7,9 @@ options:
 	prefix: &8[&c&lMOD&8]
 
 command /staffchat:
-  aliases: /sc, /staffc
+	aliases: /sc, /staffc
 	permission message: &cYou do not have permission to use this command
-  trigger:
+	trigger:
 		if {staffchat.toggle.%player's uuid%} isn't set:
 			set {staffchat.toggle.%player's uuid%} to false
 		if {staffchat.toggle.%player's uuid%} is false:
@@ -36,18 +36,18 @@ command /clearchat:
 		broadcast "{@prefix} &cChat has been cleared by %player%"
 
 command /mutechat:
-  permission: 03mod.mutechat
+	permission: 03mod.mutechat
 	permission message: &cYou do not have permission to use this command
-  trigger:
-    if {mutechat} is false:
-      set {mutechat} to true
-      broadcast "{@prefix} &cChat has been muted by %player%"
-    else:
-      set {mutechat} to false
-      broadcast "{@prefix} &aChat has been unmuted by %player%"
+	trigger:
+		if {mutechat} is false:
+			set {mutechat} to true
+			broadcast "{@prefix} &cChat has been muted by %player%"
+		else:
+			set {mutechat} to false
+			broadcast "{@prefix} &aChat has been unmuted by %player%"
 
 on chat:
-  if player does not have permission "03mod.mutechat.bypass":
-    if {mutechat} is true:
-      send "&cThe chat is currently muted."
-      cancel event
+	if player does not have permission "03mod.mutechat.bypass":
+		if {mutechat} is true:
+			send "&cThe chat is currently muted."
+			cancel event
