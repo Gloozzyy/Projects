@@ -8,8 +8,6 @@ Requirements for majority of them:
 
 ## 03Gens:
 
-## 03Mines:
-
 ## 03SMP:
 	https://github.com/Gloozzyy/Projects/blob/main/Skript/Lifesteal.sk
 	https://github.com/Gloozzyy/Projects/blob/main/Skript/Bounty.sk
