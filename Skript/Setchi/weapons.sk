@@ -1,0 +1,33 @@
+options:
+	prefix: &8[&4&lSetchi&8] &8●&7
+
+#Lightning Blade
+on right click:
+	if name of player's tool is "&e&l⚡ &8[&eLightning Blade&8] &e&l⚡":
+		if player is sneaking:
+			set {data::%uuid of player%::cooldowns::lightningblade} to difference between {data::%uuid of player%::cooldowns::up} and now
+			if {data::%uuid of player%::cooldowns::lightningblade} < 5 seconds:
+				play sound "minecraft:block.anvil.land" to the player
+				send "{@prefix} &cThis ability is on cooldown"
+				cancel event
+				stop
+			set {data::%uuid of player%::cooldowns::up} to now
+			push the player forwards at speed 8
+			wait 10 ticks
+			play sound "minecraft:entity.lightning_bolt.thunder" at the player
+			strike lightning at the player
+		else:
+			set {data::%uuid of player%::cooldowns::lightningblade} to difference between {data::%uuid of player%::cooldowns::up} and now
+			if {data::%uuid of player%::cooldowns::lightningblade} < 5 seconds:
+				play sound "minecraft:block.anvil.land" to the player
+				send "{@prefix} &cThis ability is on cooldown"
+				cancel event
+				stop
+			set {data::%uuid of player%::cooldowns::up} to now
+			strike lightning at the targeted block
+			play sound "minecraft:entity.lightning_bolt.thunder" at the player
+	else if name of player's tool is "&c🔥 &8[&cFire Blade&8] &c🔥":
+		send "hi"
+	
+	else if name of player's tool is "&b&l🌊 &8[&bWater Blade&8] &b&l🌊":
+		send "hi"
