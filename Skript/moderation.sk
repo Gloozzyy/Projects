@@ -4,7 +4,7 @@
 #
 
 options:
-	prefix: &8[&c&lMOD&8]
+	prefix: &8[&9&l03&b&lMOD&8]
 
 command /staffchat:
 	aliases: /sc, /staffc
@@ -24,7 +24,7 @@ on chat:
 		if loop-player has permission "03mod.staffchat.toggle":
 			if {staffchat.toggle.%player's uuid%} is true:
 				cancel event
-				send "&8[&aStaffChat&8] &7%player's display name%&7 »&r &7%formatted message%" to loop-players
+				send "&8[&9&lSTAFF&b&lCHAT&8] &b%player%&7 »&r &7%formatted message%" to loop-players
 				
 command /clearchat:
 	aliases: /cc, /purge
@@ -51,3 +51,76 @@ on chat:
 		if {mutechat} is true:
 			send "&cThe chat is currently muted."
 			cancel event
+			
+command /commandspy [<player>]:
+	aliases: /commands, /cspy
+	permission: 03mod.commandspy
+	trigger:
+		if arg 1 is set:
+			if {data::%uuid of arg-1%::commandspy} is set:
+				clear {data::%uuid of arg-1%::commandspy}
+				send "{@prefix} &c&lCommand spy has been disabled for %arg 1%."
+				send "{@prefix} &c&lYour command spy has been disabled." to arg 1
+			else:
+				set {data::%uuid of arg-1%::commandspy} to true
+				send "{@prefix} &a&lYour command spy has been enabled." to arg 1
+				send "{@prefix} &a&lCommand spy has been enabled for %arg 1%."
+		else:
+			if {data::%uuid of arg-1%::commandspy} is set:
+				clear {data::%uuid of arg-1%::commandspy}
+				send "{@prefix} &c&lYour command spy has been disabled."
+			else:
+				set {data::%uuid of arg-1%::commandspy} to true
+				send "{@prefix} &a&lYour command spy has been enabled."
+on command:
+	if sender is a player:
+		loop all players:
+			if {data::%uuid of arg-1%::commandspy} is set:
+				if "%player%" is not "%loop-player%":
+					send "{@prefix} &c&l%player% executed the command &n/%complete command%&c&l." to loop-player
+on load:
+
+	set {csversion} to "2.1"
+	message "{@prefix} &a&lSuccessfully loaded CommandSpy&7." to console
+on unload:
+	message "{@prefix} &a&lSuccessfully unloaded CommandSpy&7.  Goodbye!" to console
+on quit:
+	delete {cs::%uuid of player%}
+	
+command /freeze [<player>]:
+	permission: 03mod.freeze
+	trigger:
+		if arg-1 is set:
+			if arg-1 is a player:
+				if {data::%uuid of arg-1%::freeze} is true:
+					send "{@prefix} &b%arg-1% &3is already frozen! Use &8/&bunfreeze %arg-1% &3to unfreeze them!"
+				else:
+					set {data::%uuid of arg-1%::freeze} to true
+					broadcast ""
+					broadcast "{@prefix} &b%arg-1% &7was frozen by &b%player%"
+					broadcast ""
+
+command /unfreeze [<player>]:
+	permission: 03mod.freeze
+	trigger:
+		if arg-1 is set:
+			if arg-1 is a player:
+				if {data::%uuid of arg-1%::freeze} is true:
+					set {data::%uuid of arg-1%::freeze} to false
+					broadcast ""
+					broadcast "{@prefix} &b%arg-1% &7was unfrozen by &b%player%"
+					broadcast ""
+				else:
+					send "{@prefix} &cThis player is not frozen!"
+				
+
+on player move:
+	if {data::%uuid of player%::freeze} is true:
+		cancel event
+		send "{@prefix} &cYou are frozen and cannot move!" to the player
+
+on command:
+	if {data::%uuid of player%::freeze} is true:
+		if player does not have permission "03mod.freeze":
+			cancel event
+			send "{@prefix} &cYou are frozen and cannot execute commands!" to the player
