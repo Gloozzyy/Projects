@@ -1,0 +1,86 @@
+# Chat Mentions by Gloozzy
+#
+# How do I use it?
+#   Say a player in the server's name and it will mention them if they have chat mentions on.
+#
+# How do I disable chat mentions?
+#   Execute the command /options and click the red dye (chat mentions toggle button)
+#
+# Changelogs:
+# [+] New option: DND, disables the ping noise
+# [+] New option: Profile Publicity, and /profile <player>
+
+options:
+	prefix: &8[&b&lOPTIONS&8]
+	
+on join:
+	if {options::%uuid of player%::mentions} is not set:
+		set {options::%uuid of player%::mentions} to true
+	if {options::%uuid of player%::dnd} is not set:
+		set {options::%uuid of player%::dnd} to false
+	if {options::%uuid of player%::publicprofile} is not set:
+		set {options::%uuid of player%::publicprofile} to true
+
+command /options:
+	aliases: /controls
+	trigger:
+		options(player)
+		
+command /profile [<player>]:
+	aliases: /player
+	trigger:
+		if arg-1 is set:
+			if {options::%uuid of arg-1%::publicprofile} is true:
+				profile(player, arg-1)
+				stop
+			else:
+				send "{@prefix} &cThis user's profile is not public!"
+		else:
+			send "{@prefix} &cInvalid syntax: &8/&bprofile &8<&bplayer&8>"
+		
+function options(p: player):
+	create a gui with virtual chest inventory with size 5 named "User Profile":
+		make gui slot 13 with skull of {_p} named "&b%{_p}%"
+		#profile publicity
+		if {options::%uuid of {_p}%::publicprofile} is true:
+			make gui slot 30 with lime dye named "&bProfile Publicity" with lore " ", "&aPublic":
+				set {options::%uuid of {_p}%::publicprofile} to false
+				options({_p})
+		else:
+			make gui slot 30 with red dye named "&bProfile Publicity" with lore " ", "&cPrivate":
+				set {options::%uuid of {_p}%::publicprofile} to true
+				options({_p})
+		#mentions
+		if {options::%uuid of {_p}%::mentions} is true:
+			make gui slot 31 with lime dye named "&bChat Mentions" with lore " ", "&aOn":
+				set {options::%uuid of {_p}%::mentions} to false
+				options({_p})
+		else:
+			make gui slot 31 with red dye named "&bChat Mentions" with lore " ", "&cOff":
+				set {options::%uuid of {_p}%::mentions} to true
+				options({_p})
+		#dnd
+		if {options::%uuid of {_p}%::dnd} is true:
+			make gui slot 32 with lime dye named "&bDo Not Disturb" with lore " ", "&aOn":
+				set {options::%uuid of {_p}%::dnd} to false
+				options({_p})
+		else:
+			make gui slot 32 with red dye named "&bDo Not Disturb" with lore " ", "&cOff":
+				set {options::%uuid of {_p}%::dnd} to true
+				options({_p})
+		make gui slot 44 with end portal frame named "&bCredits" with lore " ", "&8- &bSkript made by &b&lGloozzy"
+		open last created gui to {_p}
+
+function profile(p: player, t: player):
+	create a gui with virtual chest inventory with size 3 named "%{_t}%'s Profile":
+		make gui slot 13 with skull of {_t} named "&b%{_t}%" with lore "&bKills: &7%{kills.%uuid of {_t}%}%", "&bDeaths: &7%{deaths.%uuid of {_t}%}%"
+		
+		open last created gui to {_p}
+
+on chat:
+	loop all players:
+		if message contains "%loop-player%":
+			if {options::%uuid of loop-player%::mentions} is true:
+				replace all "%loop-player%" with "&e@%loop-player%&r" in message
+				if {options::%uuid of loop-player%::dnd} is false:
+					play sound "minecraft:entity.experience_orb.pickup" with volume 1 and pitch 2 to loop-player
