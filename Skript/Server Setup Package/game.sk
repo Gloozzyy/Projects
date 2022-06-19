@@ -1,1 +1,41 @@
+options:
+	prefix: &8[&9&l03&b&lSETUP%&8] &8●&7
 
+#Custom death message
+on death:
+	if victim is a player:
+		if attacker is set:
+			if attacker is a player:
+				broadcast "&8[&c☠&8] &c%victim% &7was slain by &c%attacker% &8(&c%health of attacker*2%❤&8)"
+			else:
+				broadcast "&8[&c☠&8] &c%victim% &7was killed by a %attacker%"
+		else:
+			broadcast "&8[&c☠&8] &c%victim% &7died"
+
+#Emoticons
+on chat:
+	replace all ":skull:" or "{skull}" in message with "☠"
+	replace all ":shrug:" or "{shrug}" in message with "¯\_(ツ)_/¯"
+  
+#Item protection
+command /drops:
+	aliases: /drop
+	trigger:
+		if {data::%uuid of player%::drops} is true:
+			set {date::%uuid of player%::drops} to false
+			send formatted "{@prefix} &cDisabled drops" to the player
+		else:
+			set {data::%uuid of player%::drops} to true 
+			send formatted "{@prefix} &aEnabled drops" to the player
+      
+#Named dropped items
+on drop:
+	if {data::%uuid of player%::drops} is false:
+		cancel event
+		send formatted "{@prefix} &cDrops are disabled &8/&bdrops &cto enable them" to the player
+on item spawn:
+	if name of event-item is set:
+		set display name of event-entity to name of event-item
+	else:
+		set {_type} to "%type of event-item%"
+		set display name of event-entity to {_type} in strict proper case
