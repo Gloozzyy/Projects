@@ -2,6 +2,9 @@
 #
 # Changelogs:
 #
+# [+] Commandspy
+# [+] Freeze/unfreeze
+#
 
 options:
 	prefix: &8[&9&l03&b&lMOD&8]
