@@ -14,7 +14,8 @@
 
 options:
 	prefix: &8[&b&lOPTIONS&8]
-	chatcolor: &r #Change this to a variable, placeholder etc to use as your chatcolor
+	chatcolor: &r
+	#Change this to a variable, placeholder etc to use as your chatcolor
 	
 on join:
 	if {options::%uuid of player%::mentions} is not set:
