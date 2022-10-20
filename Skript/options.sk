@@ -7,11 +7,14 @@
 #   Execute the command /options and click the red dye (chat mentions toggle button)
 #
 # Changelogs:
-# [+] New option: DND, disables the ping noise
-# [+] New option: Profile Publicity, and /profile <player>
+# [+] New option: DND, disables the ping noise - ???
+# [+] New option: Profile Publicity, and /profile <player> - 5/8/22
+# [-] Removed /profile, new GUI and command soon - 10/20/22
+# [+] New option: chatcolor - 10/20/22
 
 options:
 	prefix: &8[&b&lOPTIONS&8]
+	chatcolor: &r #Change this to a variable, placeholder etc
 	
 on join:
 	if {options::%uuid of player%::mentions} is not set:
@@ -26,20 +29,8 @@ command /options:
 	trigger:
 		options(player)
 		
-command /profile [<player>]:
-	aliases: /player
-	trigger:
-		if arg-1 is set:
-			if {options::%uuid of arg-1%::publicprofile} is true:
-				profile(player, arg-1)
-				stop
-			else:
-				send "{@prefix} &cThis user's profile is not public!"
-		else:
-			send "{@prefix} &cInvalid syntax: &8/&bprofile &8<&bplayer&8>"
-		
 function options(p: player):
-	create a gui with virtual chest inventory with size 5 named "User Profile":
+	create a gui with virtual chest inventory with size 5 named "User Options":
 		make gui slot 13 with skull of {_p} named "&b%{_p}%"
 		#profile publicity
 		if {options::%uuid of {_p}%::publicprofile} is true:
@@ -71,17 +62,11 @@ function options(p: player):
 		make gui slot 44 with end portal frame named "&bCredits" with lore " ", "&8- &bSkript made by &b&lGloozzy"
 		open last created gui to {_p}
 
-function profile(p: player, t: player):
-	create a gui with virtual chest inventory with size 3 named "%{_t}%'s Profile":
-		make gui slot 13 with skull of {_t} named "&b%{_t}%" with lore "&bKills: &7%{kills.%uuid of {_t}%}%", "&bDeaths: &7%{deaths.%uuid of {_t}%}%"
-		
-		open last created gui to {_p}
-
 on chat:
 	loop all players:
-		if message contains "%loop-player%":
-			if {options::%uuid of loop-player%::mentions} is true:
-				replace all "%loop-player%" with "&e@%loop-player%&r" in message
-				if {options::%uuid of loop-player%::dnd} is false:
-					play sound "minecraft:entity.experience_orb.pickup" with volume 1 and pitch 2 to loop-player
+		message contains "%loop-player%"
+		{options::%uuid of loop-player%::mentions} is true
+		replace all "%loop-player%" with "&e@%loop-player%{@chatcolor}" in message
+		{options::%uuid of loop-player%::dnd} is false
+		play sound "minecraft:entity.experience_orb.pickup" with volume 1 and pitch 2 to loop-player
 
